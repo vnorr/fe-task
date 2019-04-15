@@ -39,43 +39,35 @@ const Arrow = styled('div')`
     width: 40px;
 `
 
-class Schedule extends Component {
-    state = {}
+const buildGame = (game, onGameClick) => {
 
-    buildGame = game => {
-        const { onGameClick } = this.props
-
-        return (
-            <Game key={game.id} onClick={() => onGameClick(game.id)}>
-                <Arrow>⇣⇡</Arrow>
-                <div>{game.tracks[0].id}</div>
-                <div>{game.tracks[0].name}</div>
-                <div>{moment(game.startTime).format('MM-DD-YYYY HH:mm')}</div>
-            </Game>
-        )
-    }
-
-    render() {
-        const { gameSchedule } = this.props
-        if (!gameSchedule) return null
-
-        return (
-            <div>
-                <Table>
-                    <h4>Tidigare tävlingar - {gameSchedule.betType}</h4>
-                    {gameSchedule && gameSchedule.results.map(game => (
-                        this.buildGame(game)
-                    ))}
-                </Table>
-                <Table>
-                    <h4>Kommande tävlingar - {gameSchedule.betType}</h4>
-                    {gameSchedule && gameSchedule.upcoming.map(game => (
-                        this.buildGame(game)
-                    ))}
-                </Table>
-            </div>
-        )
-    }
+    return (
+        <Game key={game.id} onClick={() => onGameClick(game.id)}>
+            <Arrow>⇣⇡</Arrow>
+            <div>{game.tracks[0].id}</div>
+            <div>{game.tracks[0].name}</div>
+            <div>{moment(game.startTime).format('MM-DD-YYYY HH:mm')}</div>
+        </Game>
+    )
 }
 
-export default Schedule;
+export default ({ onGameClick, gameSchedule }) => {
+    if (!gameSchedule) return null
+
+    return (
+        <div>
+            <Table>
+                <h4>Tidigare tävlingar - {gameSchedule.betType}</h4>
+                {gameSchedule && gameSchedule.results.map(game => (
+                    buildGame(game, onGameClick)
+                ))}
+            </Table>
+            <Table>
+                <h4>Kommande tävlingar - {gameSchedule.betType}</h4>
+                {gameSchedule && gameSchedule.upcoming.map(game => (
+                    buildGame(game, onGameClick)
+                ))}
+            </Table>
+        </div>
+    )
+}
